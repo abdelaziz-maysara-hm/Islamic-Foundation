@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أدوات مفيدة: حاسبة الزكاة ومحول التاريخ الهجري — المكتبة الجامعة</title>
+<meta name="description" content="حاسبة زكاة تفاعلية ومحول تاريخ هجري/ميلادي، أدوات مجانية سريعة تعمل مباشرة من المتصفح.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="أدوات مفيدة: حاسبة الزكاة ومحول التاريخ الهجري — المكتبة الجامعة">
+<meta property="og:description" content="حاسبة زكاة تفاعلية ومحول تاريخ هجري/ميلادي، أدوات مجانية سريعة تعمل مباشرة من المتصفح.">
+<meta property="og:locale" content="ar_AR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="أدوات مفيدة: حاسبة الزكاة ومحول التاريخ الهجري — المكتبة الجامعة">
+<meta name="twitter:description" content="حاسبة زكاة تفاعلية ومحول تاريخ هجري/ميلادي، أدوات مجانية سريعة تعمل مباشرة من المتصفح.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .tool-card{background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:30px; margin-bottom:26px;}
+  .tool-card h2{font-size:19px; color:var(--teal-deep); margin-bottom:6px;}
+  .tool-card > p.tool-desc{color:var(--muted); font-size:13.5px; margin-bottom:22px;}
+  .field{margin-bottom:16px;}
+  .field label{display:block; font-size:13.5px; font-weight:700; margin-bottom:6px; color:var(--text);}
+  .field input, .field select{
+    width:100%; padding:12px 14px; border-radius:10px; border:1px solid var(--line);
+    font-family:'Tajawal'; font-size:14px; background:var(--paper);
+  }
+  .field input:focus, .field select:focus{outline:none; border-color:var(--teal);}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .btn-calc{
+    background:var(--teal-deep); color:#fff; border:none; padding:13px 26px; border-radius:10px;
+    font-family:'Tajawal'; font-weight:700; font-size:14.5px; cursor:pointer; margin-top:6px;
+  }
+  .btn-calc:hover{background:var(--teal);}
+  .result-box{
+    margin-top:20px; padding:18px 20px; border-radius:12px; background:var(--teal-soft);
+    display:none; font-size:14.5px; line-height:1.9;
+  }
+  .result-box.show{display:block;}
+  .result-box b{color:var(--teal-deep); font-size:17px;}
+  .disclaimer{font-size:12px; color:var(--muted); margin-top:14px; border-top:1px solid var(--line); padding-top:12px;}
+  @media(max-width:620px){.row2{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="index.html" class="logo"><span class="mark">ق</span> المكتبة الجامعة</a>
+    <nav class="nav-links">
+      <a href="index.html">الرئيسية</a>
+      <a href="quran.html">القرآن الكريم</a>
+      <a href="quran-reciters.html">قراء القرآن</a>
+      <a href="books.html">الكتب</a>
+      <a href="videos.html">الدروس المرئية</a>
+      <div class="nav-drop">
+      <a href="fatawa.html">الفتاوى ▾</a>
+      <div class="nav-drop-menu">
+        <a href="fatawa.html#sec-taharah">الطهارة</a>
+        <a href="fatawa.html#sec-ibadat">الصلاة والعبادات</a>
+        <a href="fatawa.html#sec-muamalat">المعاملات</a>
+        <a href="fatawa.html#sec-usra">الأسرة والزواج</a>
+        <a href="fatawa.html#sec-adab">الآداب العامة</a>
+        <a href="fatawa.html#sec-asriya">قضايا معاصرة</a>
+      </div>
+    </div>
+      <a href="tools.html" class="active">أدوات</a>
+      <a href="glossary.html">القاموس</a>
+      <a href="apps.html">تطبيقات مفيدة</a>
+    </nav>
+    <div class="search-box">
+      <input type="text" data-search-input placeholder="دوّر...">
+      <span class="icon">🔍</span>
+      <div class="search-results"></div>
+    </div>
+    <button class="menu-btn" id="menuBtn" aria-label="افتح القائمة">☰</button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">الرئيسية</a>
+    <a href="quran.html">القرآن الكريم</a>
+      <a href="quran-reciters.html">قراء القرآن</a>
+    <a href="books.html">الكتب</a>
+    <a href="videos.html">الدروس المرئية</a>
+    <a href="fatawa.html">الفتاوى</a>
+    <a href="tools.html">أدوات</a>
+    <a href="glossary.html">القاموس</a>
+    <a href="apps.html">تطبيقات مفيدة</a>
+  </div>
+</header>
+
+<div class="ayah-banner">
+  <p class="ayah">"خُذْ مِنْ أَمْوَالِهِمْ صَدَقَةً تُطَهِّرُهُمْ وَتُزَكِّيهِم بِهَا"</p>
+  <span>سورة التوبة — الآية ١٠٣</span>
+</div>
+
+<section class="hero" style="padding-bottom:10px;">
+  <div class="wrap">
+    <span class="eyebrow">أدوات مفيدة</span>
+    <h1>حاسبة الزكاة ومحول التاريخ الهجري</h1>
+    <p>أدوات بسيطة تشتغل فورًا من المتصفح من غير ما تحتاج تحميل أي تطبيق.</p>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap" style="max-width:640px;">
+
+    <div class="tool-card">
+      <h2>💰 حاسبة الزكاة</h2>
+      <p class="tool-desc">احسب زكاة المال النقدي والذهب بسرعة. النصاب المستخدم هنا هو نصاب الفضة (الأحوط للفقراء) بمعدل تقريبي، وتقدر تعدّله حسب سعر الفضة الحالي.</p>
+
+      <div class="field">
+        <label for="cash">المال النقدي المدّخر (جنيه)</label>
+        <input type="number" id="cash" placeholder="مثال: 50000">
+      </div>
+      <div class="field">
+        <label for="gold">قيمة الذهب/الفضة المملوك (جنيه) — إن وجد</label>
+        <input type="number" id="gold" placeholder="مثال: 20000">
+      </div>
+      <div class="field">
+        <label for="debt">الديون المستحقة عليك (تُخصم) — إن وجدت</label>
+        <input type="number" id="debt" placeholder="مثال: 5000">
+      </div>
+      <div class="field">
+        <label for="nisab">نصاب الزكاة الحالي بالجنيه (نصاب الفضة تقريبًا)</label>
+        <input type="number" id="nisab" value="15000">
+      </div>
+      <button class="btn-calc" onclick="calcZakat()">احسب الزكاة</button>
+
+      <div class="result-box" id="zakatResult"></div>
+      <p class="disclaimer">⚠️ هذه الحاسبة للتقدير الأولي فقط ولا تغني عن استشارة أهل العلم في حالتك الخاصة، خصوصًا لو عندك أنواع مال أخرى (تجارة، أسهم، مواشي).</p>
+    </div>
+
+    <div class="tool-card">
+      <h2>🗓️ محول التاريخ الهجري ⇄ الميلادي</h2>
+      <p class="tool-desc">حوّل أي تاريخ ميلادي لتاريخ هجري تقريبي والعكس (حساب فلكي تقريبي، قد يختلف يوم عن الرؤية الشرعية الفعلية).</p>
+
+      <div class="field">
+        <label for="gregDate">أدخل تاريخ ميلادي</label>
+        <input type="date" id="gregDate">
+      </div>
+      <button class="btn-calc" onclick="convertToHijri()">حوّل إلى هجري</button>
+      <div class="result-box" id="hijriResult"></div>
+
+      <div style="margin-top:26px; border-top:1px solid var(--line); padding-top:20px;">
+        <div class="row2">
+          <div class="field">
+            <label for="hYear">السنة الهجرية</label>
+            <input type="number" id="hYear" placeholder="مثال: 1447">
+          </div>
+          <div class="field">
+            <label for="hMonth">الشهر الهجري</label>
+            <select id="hMonth">
+              <option value="1">محرم</option><option value="2">صفر</option>
+              <option value="3">ربيع الأول</option><option value="4">ربيع الآخر</option>
+              <option value="5">جمادى الأولى</option><option value="6">جمادى الآخرة</option>
+              <option value="7">رجب</option><option value="8">شعبان</option>
+              <option value="9">رمضان</option><option value="10">شوال</option>
+              <option value="11">ذو القعدة</option><option value="12">ذو الحجة</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="hDay">اليوم الهجري</label>
+          <input type="number" id="hDay" min="1" max="30" placeholder="مثال: 15">
+        </div>
+        <button class="btn-calc" onclick="convertToGregorian()">حوّل إلى ميلادي</button>
+        <div class="result-box" id="gregResult"></div>
+      </div>
+      <p class="disclaimer">⚠️ التحويل هنا حسابي تقريبي (Tabular Islamic Calendar) وليس اعتمادًا على رؤية الهلال الفعلية، فقد يفرق يومًا عن الإعلان الرسمي في بعض الدول.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <a href="index.html" class="logo"><span class="mark">ق</span> المكتبة الجامعة</a>
+      <div class="footer-links">
+        <a href="quran.html">القرآن الكريم</a>
+      <a href="quran-reciters.html">قراء القرآن</a>
+        <a href="books.html">الكتب</a>
+        <a href="videos.html">الدروس المرئية</a>
+        <a href="fatawa.html">الفتاوى</a>
+        <a href="apps.html">تطبيقات مفيدة</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 المكتبة الجامعة — موقع غير هادف للربح، لخدمة طلاب العلم</div>
+  </div>
+</footer>
+
+<script>window.SITE_ROOT = "";</script>
+<script src="assets/js/search-data.js"></script>
+<script src="assets/js/topics.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/hijri.js"></script>
+<script>
+function calcZakat(){
+  const cash = parseFloat(document.getElementById('cash').value) || 0;
+  const gold = parseFloat(document.getElementById('gold').value) || 0;
+  const debt = parseFloat(document.getElementById('debt').value) || 0;
+  const nisab = parseFloat(document.getElementById('nisab').value) || 15000;
+  const netWealth = cash + gold - debt;
+  const box = document.getElementById('zakatResult');
+  if (netWealth < nisab) {
+    box.innerHTML = `صافي مالك <b>${netWealth.toLocaleString('ar-EG')} جنيه</b> أقل من النصاب (${nisab.toLocaleString('ar-EG')} جنيه)، فلا تجب عليك الزكاة هذا العام على هذا المال.`;
+  } else {
+    const zakat = netWealth * 0.025;
+    box.innerHTML = `صافي مالك الخاضع للزكاة: <b>${netWealth.toLocaleString('ar-EG')} جنيه</b><br>مقدار الزكاة الواجبة (2.5%): <b>${zakat.toLocaleString('ar-EG', {maximumFractionDigits:0})} جنيه</b>`;
+  }
+  box.classList.add('show');
+}
+
+function convertToHijri(){
+  const val = document.getElementById('gregDate').value;
+  const box = document.getElementById('hijriResult');
+  if (!val) { box.innerHTML = 'من فضلك اختر تاريخ.'; box.classList.add('show'); return; }
+  const d = new Date(val);
+  const h = HijriConverter.gregorianToHijri(d.getFullYear(), d.getMonth()+1, d.getDate());
+  box.innerHTML = `التاريخ الهجري التقريبي: <b>${h.day} ${HijriConverter.monthNames[h.month-1]} ${h.year} هـ</b>`;
+  box.classList.add('show');
+}
+
+function convertToGregorian(){
+  const y = parseInt(document.getElementById('hYear').value);
+  const m = parseInt(document.getElementById('hMonth').value);
+  const d = parseInt(document.getElementById('hDay').value);
+  const box = document.getElementById('gregResult');
+  if (!y || !d) { box.innerHTML = 'من فضلك أدخل السنة واليوم الهجري.'; box.classList.add('show'); return; }
+  const g = HijriConverter.hijriToGregorian(y, m, d);
+  const dateStr = g.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+  box.innerHTML = `التاريخ الميلادي التقريبي: <b>${dateStr}</b>`;
+  box.classList.add('show');
+}
+</script>
+</body>
+</html>
