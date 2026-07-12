@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>القرآن الكريم — قراءة وتفسير واستماع — المكتبة الجامعة</title>
+<meta name="description" content="تصفح القرآن الكريم كاملاً بالنص العثماني مع التفسير الميسّر وتلاوة صوتية، وابحث في آياته مباشرة من المتصفح.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="القرآن الكريم — قراءة وتفسير واستماع — المكتبة الجامعة">
+<meta property="og:description" content="تصفح القرآن الكريم كاملاً بالنص العثماني مع التفسير الميسّر وتلاوة صوتية، وابحث في آياته مباشرة من المتصفح.">
+<meta property="og:locale" content="ar_AR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="القرآن الكريم — قراءة وتفسير واستماع — المكتبة الجامعة">
+<meta name="twitter:description" content="تصفح القرآن الكريم كاملاً بالنص العثماني مع التفسير الميسّر وتلاوة صوتية، وابحث في آياته مباشرة من المتصفح.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .qa-note{background:var(--teal-soft); border-radius:12px; padding:14px 18px; font-size:13px; color:var(--teal-deep); margin-bottom:26px; line-height:1.9;}
+  .qa-note a{color:var(--teal-deep); font-weight:800; text-decoration:underline;}
+  #qStatus{font-size:13px; color:var(--muted); margin-bottom:14px; min-height:18px;}
+
+  .qa-searchwrap{max-width:560px; margin:0 auto 40px;}
+  .qa-searchwrap input{
+    width:100%; padding:14px 46px 14px 16px; border-radius:999px; border:1px solid var(--line);
+    background:#fff; font-family:'Tajawal'; font-size:14.5px; box-shadow:var(--shadow);
+  }
+  .qa-searchwrap input:focus{outline:none; border-color:var(--teal);}
+  #qSearchResults{margin-top:16px;}
+  .qa-count{font-size:12.5px; color:var(--muted); margin-bottom:10px;}
+  .search-hit{background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px 18px; margin-bottom:10px; cursor:pointer; transition:box-shadow .2s;}
+  .search-hit:hover{box-shadow:var(--shadow);}
+  .search-hit p{font-family:'Amiri', serif; font-size:18px; margin-top:6px; line-height:2;}
+  .qa-loading{text-align:center; color:var(--muted); font-size:13.5px; padding:20px;}
+
+  #surahGrid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  .surah-card{
+    display:flex; align-items:center; gap:12px; background:#fff; border:1px solid var(--line);
+    border-radius:14px; padding:14px 16px; cursor:pointer; text-align:right; font-family:'Tajawal';
+    transition:transform .15s, box-shadow .15s;
+  }
+  .surah-card:hover{transform:translateY(-3px); box-shadow:var(--shadow);}
+  .surah-num{
+    width:34px; height:34px; flex-shrink:0; border-radius:9px; background:var(--teal-soft); color:var(--teal-deep);
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px;
+  }
+  .surah-names{display:flex; flex-direction:column; gap:3px;}
+  .surah-names b{font-size:16px; color:var(--teal-deep); font-family:'Amiri', serif;}
+  .surah-names small{font-size:11.5px; color:var(--muted);}
+
+  #surahReader{display:none;}
+  .reader-head{text-align:center; margin-bottom:34px;}
+  .btn-back{background:none; border:1px solid var(--line); color:var(--teal-deep); font-weight:700; font-size:13px; padding:8px 16px; border-radius:20px; cursor:pointer; margin-bottom:16px;}
+  .btn-back:hover{background:var(--teal-soft);}
+  .reader-head h2{font-size:26px; color:var(--teal-deep); margin-bottom:6px;}
+  .reader-sub{color:var(--muted); font-size:13.5px; margin-bottom:18px;}
+  .ayah-list{max-width:720px; margin:0 auto;}
+  .ayah-block{background:#fff; border:1px solid var(--line); border-radius:14px; padding:22px 24px; margin-bottom:14px;}
+  .ayah-text{font-family:'Amiri', serif; font-size:23px; line-height:2.3; color:var(--text);}
+  .ayah-badge{color:var(--gold); font-size:16px; font-weight:700; font-family:'Tajawal';}
+  .ayah-actions{display:flex; gap:10px; margin-top:14px;}
+  .mini-btn{
+    background:var(--teal-soft); color:var(--teal-deep); border:none; font-size:12.5px; font-weight:800;
+    padding:7px 14px; border-radius:20px; cursor:pointer;
+  }
+  .mini-btn:hover{background:var(--teal); color:#fff;}
+  .ayah-tafsir{margin-top:14px; padding-top:14px; border-top:1px dashed var(--line); font-size:14px; color:var(--muted); line-height:1.9;}
+
+  @media(max-width:900px){#surahGrid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:620px){#surahGrid{grid-template-columns:1fr;} .ayah-text{font-size:20px;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="index.html" class="logo"><span class="mark">ق</span> المكتبة الجامعة</a>
+    <nav class="nav-links">
+      <a href="index.html">الرئيسية</a>
+      <a href="quran.html" class="active">القرآن الكريم</a>
+      <a href="books.html">الكتب</a>
+      <a href="videos.html">الدروس المرئية</a>
+      <div class="nav-drop">
+      <a href="fatawa.html">الفتاوى ▾</a>
+      <div class="nav-drop-menu">
+        <a href="fatawa.html#sec-taharah">الطهارة</a>
+        <a href="fatawa.html#sec-ibadat">الصلاة والعبادات</a>
+        <a href="fatawa.html#sec-muamalat">المعاملات</a>
+        <a href="fatawa.html#sec-usra">الأسرة والزواج</a>
+        <a href="fatawa.html#sec-adab">الآداب العامة</a>
+        <a href="fatawa.html#sec-asriya">قضايا معاصرة</a>
+      </div>
+    </div>
+      <a href="tools.html">أدوات</a>
+      <a href="glossary.html">القاموس</a>
+      <a href="apps.html">تطبيقات مفيدة</a>
+    </nav>
+    <div class="search-box">
+      <input type="text" data-search-input placeholder="دوّر...">
+      <span class="icon">🔍</span>
+      <div class="search-results"></div>
+    </div>
+    <button class="menu-btn" id="menuBtn" aria-label="افتح القائمة">☰</button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">الرئيسية</a>
+    <a href="quran.html">القرآن الكريم</a>
+    <a href="books.html">الكتب</a>
+    <a href="videos.html">الدروس المرئية</a>
+    <a href="fatawa.html">الفتاوى</a>
+    <a href="tools.html">أدوات</a>
+    <a href="glossary.html">القاموس</a>
+    <a href="apps.html">تطبيقات مفيدة</a>
+  </div>
+</header>
+
+<div class="ayah-banner">
+  <p class="ayah">"إِنَّ هَـٰذَا الْقُرْآنَ يَهْدِي لِلَّتِي هِيَ أَقْوَمُ"</p>
+  <span>سورة الإسراء — الآية ٩</span>
+</div>
+
+<section class="hero" style="padding-bottom:10px;">
+  <div class="wrap">
+    <span class="eyebrow">القرآن الكريم</span>
+    <h1>تصفح القرآن كاملاً بالتفسير والاستماع</h1>
+    <p>١١٤ سورة، النص العثماني كامل، مع التفسير الميسّر لكل آية وتلاوة صوتية — كله حي مباشرة من غير ما تحمّل حاجة.</p>
+    <a href="quran-reciters.html" style="display:inline-flex;align-items:center;gap:8px;margin-top:10px;background:var(--teal-deep);color:var(--gold-soft);font-family:'Cairo';font-weight:800;font-size:14px;padding:12px 28px;border-radius:999px;transition:opacity .2s;">
+      🎙️ استمع بصوت 63 قارئ موثق ←
+    </a>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+
+    <div class="qa-note">
+      📡 المحتوى في هذه الصفحة بييجي مباشرة من <a href="https://alquran.cloud/api" target="_blank">Al Quran Cloud API</a> (خدمة مجانية مفتوحة، بدون تسجيل)، فمحتاج اتصال بالإنترنت. النص والتلاوة موثوقان، لكن لو حصل انقطاع في الخدمة نفسها من عندهم، الصفحة هتوضح رسالة خطأ بدل ما تفضل فاضية.
+    </div>
+
+    <div id="qStatus"></div>
+
+    <div class="qa-searchwrap">
+      <input type="text" id="qSearchInput" placeholder="ابحث في نص القرآن الكريم... (مثال: الصبر)">
+      <div id="qSearchResults"></div>
+    </div>
+
+    <div id="surahBrowser">
+      <div id="surahGrid">
+        <p class="qa-loading">جارِ تحميل قائمة السور...</p>
+      </div>
+    </div>
+
+    <div id="surahReader"></div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <a href="index.html" class="logo"><span class="mark">ق</span> المكتبة الجامعة</a>
+      <div class="footer-links">
+        <a href="quran.html">القرآن الكريم</a>
+        <a href="books.html">الكتب</a>
+        <a href="videos.html">الدروس المرئية</a>
+        <a href="fatawa.html">الفتاوى</a>
+        <a href="tools.html">أدوات</a>
+        <a href="glossary.html">القاموس</a>
+        <a href="apps.html">تطبيقات مفيدة</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 المكتبة الجامعة — موقع غير هادف للربح، لخدمة طلاب العلم</div>
+  </div>
+</footer>
+
+<script>window.SITE_ROOT = "";</script>
+<script src="assets/js/search-data.js"></script>
+<script src="assets/js/topics.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/quran.js"></script>
+</body>
+</html>
