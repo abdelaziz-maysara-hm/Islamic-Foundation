@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>أدوات مفيدة: حاسبة الزكاة ومحول التاريخ الهجري — المكتبة الجامعة</title>
-<meta name="description" content="حاسبة زكاة تفاعلية ومحول تاريخ هجري/ميلادي، أدوات مجانية سريعة تعمل مباشرة من المتصفح.">
+<title>أدوات مفيدة: حاسبة الزكاة، حاسبة المواريث، ومحول التاريخ الهجري — المكتبة الجامعة</title>
+<meta name="description" content="حاسبة زكاة تفاعلية، حاسبة مواريث (فرائض) دقيقة، ومحول تاريخ هجري/ميلادي — أدوات مجانية سريعة تعمل مباشرة من المتصفح.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="أدوات مفيدة: حاسبة الزكاة ومحول التاريخ الهجري — المكتبة الجامعة">
-<meta property="og:description" content="حاسبة زكاة تفاعلية ومحول تاريخ هجري/ميلادي، أدوات مجانية سريعة تعمل مباشرة من المتصفح.">
+<meta property="og:title" content="أدوات مفيدة: حاسبة الزكاة، حاسبة المواريث، ومحول التاريخ الهجري — المكتبة الجامعة">
+<meta property="og:description" content="حاسبة زكاة تفاعلية، حاسبة مواريث (فرائض) دقيقة، ومحول تاريخ هجري/ميلادي — أدوات مجانية سريعة تعمل مباشرة من المتصفح.">
 <meta property="og:locale" content="ar_AR">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="أدوات مفيدة: حاسبة الزكاة ومحول التاريخ الهجري — المكتبة الجامعة">
-<meta name="twitter:description" content="حاسبة زكاة تفاعلية ومحول تاريخ هجري/ميلادي، أدوات مجانية سريعة تعمل مباشرة من المتصفح.">
+<meta name="twitter:title" content="أدوات مفيدة: حاسبة الزكاة، حاسبة المواريث، ومحول التاريخ الهجري — المكتبة الجامعة">
+<meta name="twitter:description" content="حاسبة زكاة تفاعلية، حاسبة مواريث (فرائض) دقيقة، ومحول تاريخ هجري/ميلادي — أدوات مجانية سريعة تعمل مباشرة من المتصفح.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
@@ -39,6 +39,11 @@
   .result-box.show{display:block;}
   .result-box b{color:var(--teal-deep); font-size:17px;}
   .disclaimer{font-size:12px; color:var(--muted); margin-top:14px; border-top:1px solid var(--line); padding-top:12px;}
+  .faraid-table{width:100%; border-collapse:collapse; font-size:14px;}
+  .faraid-table th, .faraid-table td{padding:10px 12px; text-align:right; border-bottom:1px solid var(--line);}
+  .faraid-table th{color:var(--teal-deep); font-size:13px;}
+  .faraid-table tr:last-child td{border-bottom:none;}
+  .faraid-note{font-size:12.5px; color:var(--muted); margin-top:14px; line-height:1.8;}
   @media(max-width:620px){.row2{grid-template-columns:1fr;}}
 </style>
 </head>
@@ -131,6 +136,76 @@
     </div>
 
     <div class="tool-card">
+      <h2>🌳 حاسبة المواريث (الفرائض)</h2>
+      <p class="tool-desc">احسب أنصبة الورثة حسب أحكام الفرائض المتفق عليها عند جمهور الفقهاء. تغطي الحاسبة: الزوج/الزوجة، الأب، الأم، الجد لأب، الجدة، الأبناء والبنات، والإخوة والأخوات الأشقاء فقط.</p>
+
+      <div class="field">
+        <label for="frDeceasedGender">المتوفى ذكر ولا أنثى؟</label>
+        <select id="frDeceasedGender" onchange="toggleSpouseField()">
+          <option value="male">ذكر (يُحسب نصيب الزوجة/الزوجات)</option>
+          <option value="female">أنثى (يُحسب نصيب الزوج)</option>
+        </select>
+      </div>
+
+      <div class="row2">
+        <div class="field" id="frSpouseWrap">
+          <label for="frSpouse">عدد الزوجات (لو المتوفى ذكر)</label>
+          <input type="number" id="frSpouse" min="0" max="4" value="0">
+        </div>
+        <div class="field">
+          <label for="frEstate">قيمة التركة الصافية (اختياري، بالجنيه)</label>
+          <input type="number" id="frEstate" placeholder="بعد سداد الديون والوصية">
+        </div>
+      </div>
+
+      <p style="font-size:13px; font-weight:700; margin:14px 0 8px;">أصول المتوفى الأحياء:</p>
+      <div class="row2">
+        <div class="field">
+          <label><input type="checkbox" id="frFather"> الأب</label>
+        </div>
+        <div class="field">
+          <label><input type="checkbox" id="frMother"> الأم</label>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label><input type="checkbox" id="frGrandfather"> الجد لأب (لو الأب متوفى)</label>
+        </div>
+        <div class="field">
+          <label><input type="checkbox" id="frGrandmother"> الجدة (لو الأم متوفاة)</label>
+        </div>
+      </div>
+
+      <p style="font-size:13px; font-weight:700; margin:14px 0 8px;">فروع المتوفى:</p>
+      <div class="row2">
+        <div class="field">
+          <label for="frSons">عدد الأبناء</label>
+          <input type="number" id="frSons" min="0" value="0">
+        </div>
+        <div class="field">
+          <label for="frDaughters">عدد البنات</label>
+          <input type="number" id="frDaughters" min="0" value="0">
+        </div>
+      </div>
+
+      <p style="font-size:13px; font-weight:700; margin:14px 0 8px;">إخوة المتوفى الأشقاء (من نفس الأب والأم):</p>
+      <div class="row2">
+        <div class="field">
+          <label for="frBrothers">عدد الإخوة الأشقاء</label>
+          <input type="number" id="frBrothers" min="0" value="0">
+        </div>
+        <div class="field">
+          <label for="frSisters">عدد الأخوات الشقيقات</label>
+          <input type="number" id="frSisters" min="0" value="0">
+        </div>
+      </div>
+
+      <button class="btn-calc" onclick="calcFaraid()">احسب الأنصبة</button>
+      <div class="result-box" id="faraidResult"></div>
+      <p class="disclaimer">⚠️ هذه الحاسبة تعليمية وتقديرية، وتغطي فقط الورثة المذكورين أعلاه. لو في التركة ورثة تانيين (أبناء ابن، إخوة لأب أو لأم فقط، أعمام، أكتر من جدة أو جد) أو التركة فيها تعقيدات (وصية، دين، أوقاف)، اﻷنصبة ممكن تختلف تمامًا، ولازم تُعرض الحالة على عالم شرعي موثوق أو المحكمة المختصة قبل أي قسمة فعلية.</p>
+    </div>
+
+    <div class="tool-card">
       <h2>🗓️ محول التاريخ الهجري ⇄ الميلادي</h2>
       <p class="tool-desc">حوّل أي تاريخ ميلادي لتاريخ هجري تقريبي والعكس (حساب فلكي تقريبي، قد يختلف يوم عن الرؤية الشرعية الفعلية).</p>
 
@@ -194,6 +269,7 @@
 <script src="assets/js/topics.js"></script>
 <script src="assets/js/main.js"></script>
 <script src="assets/js/hijri.js"></script>
+<script src="assets/js/faraid.js"></script>
 <script>
 function calcZakat(){
   const cash = parseFloat(document.getElementById('cash').value) || 0;
@@ -230,6 +306,66 @@ function convertToGregorian(){
   const g = HijriConverter.hijriToGregorian(y, m, d);
   const dateStr = g.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
   box.innerHTML = `التاريخ الميلادي التقريبي: <b>${dateStr}</b>`;
+  box.classList.add('show');
+}
+function toggleSpouseField(){
+  const gender = document.getElementById('frDeceasedGender').value;
+  const label = document.querySelector('#frSpouseWrap label');
+  const input = document.getElementById('frSpouse');
+  if (gender === 'male') {
+    label.textContent = 'عدد الزوجات (لو المتوفى ذكر)';
+    input.max = 4;
+  } else {
+    label.textContent = 'الزوج موجود؟ (1 = موجود، 0 = غير موجود)';
+    input.max = 1;
+  }
+}
+
+function calcFaraid(){
+  const input = {
+    deceasedGender: document.getElementById('frDeceasedGender').value,
+    spouseCount: parseInt(document.getElementById('frSpouse').value) || 0,
+    father: document.getElementById('frFather').checked,
+    mother: document.getElementById('frMother').checked,
+    grandfather: document.getElementById('frGrandfather').checked,
+    grandmother: document.getElementById('frGrandmother').checked,
+    sons: parseInt(document.getElementById('frSons').value) || 0,
+    daughters: parseInt(document.getElementById('frDaughters').value) || 0,
+    brothers: parseInt(document.getElementById('frBrothers').value) || 0,
+    sisters: parseInt(document.getElementById('frSisters').value) || 0
+  };
+  const box = document.getElementById('faraidResult');
+
+  const noHeirs = input.spouseCount === 0 && !input.father && !input.mother &&
+                  !input.grandfather && !input.grandmother && input.sons === 0 &&
+                  input.daughters === 0 && input.brothers === 0 && input.sisters === 0;
+  if (noHeirs) {
+    box.innerHTML = 'من فضلك حدّد ورثة المتوفى الأحياء أولًا.';
+    box.classList.add('show');
+    return;
+  }
+
+  const result = Faraid.calculate(input);
+  const estate = parseFloat(document.getElementById('frEstate').value) || 0;
+
+  let html = '<table class="faraid-table"><thead><tr><th>الوارث</th><th>النصيب</th>' +
+             (estate > 0 ? '<th>المبلغ (جنيه)</th>' : '') + '</tr></thead><tbody>';
+  result.heirs.forEach(h => {
+    const pct = (h.share.n / h.share.d * 100).toFixed(2);
+    const amount = estate > 0 ? (estate * h.share.n / h.share.d).toLocaleString('ar-EG', {maximumFractionDigits: 0}) : null;
+    html += `<tr><td>${h.label}</td><td><b>${h.share.n}/${h.share.d}</b> (${pct}%)</td>` +
+            (estate > 0 ? `<td>${amount}</td>` : '') + '</tr>';
+  });
+  html += '</tbody></table>';
+
+  if (result.awlApplied) {
+    html += '<p class="faraid-note">📌 تم تطبيق <b>العول</b>: مجموع الفروض الأصلية كان أكبر من التركة، فنقص نصيب كل وارث بنفس النسبة عشان يتساووا مع التركة.</p>';
+  }
+  if (result.notes.length) {
+    html += '<p class="faraid-note">' + result.notes.join('<br>') + '</p>';
+  }
+
+  box.innerHTML = html;
   box.classList.add('show');
 }
 </script>

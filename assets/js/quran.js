@@ -1,14 +1,25 @@
 /* ============================================================
-   وحدة القرآن الكريم — تتكامل مع Al Quran Cloud API (مجاني، بدون مفتاح)
-   المصدر: https://alquran.cloud/api  — Base: https://api.alquran.cloud/v1
+   وحدة القرآن الكريم
+   - النص والتفسير: Al Quran Cloud API (مجاني، بدون مفتاح) — https://api.alquran.cloud/v1
+   - التلاوة الصوتية: بيانات القراء من mp3quran.net (assets/js/reciters-data.js) —
+     مصدر مستقل تمامًا عن Al Quran Cloud، فمش متأثر بمشاكل الحظر بتاعته.
    بدون Backend: كل الطلبات بتتنادى مباشرة من متصفح المستخدم.
    ============================================================ */
 
 const QURAN_API  = "https://api.alquran.cloud/v1";
-const CDN_AYAH  = "https://cdn.islamic.network/quran/audio/128/ar.alafasy";
-const CDN_SURAH = "https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy";
 const EDITION_TEXT   = "quran-uthmani";
 const EDITION_TAFSIR = "ar.muyassar";
+
+/* مصدر احتياطي: quranapi.pages.dev — مستضاف على بنية تحتية مختلفة تمامًا
+   (Cloudflare Pages) عن api.alquran.cloud (Islamic Network)، فمش متأثر
+   بنفس حظر الـ IPs. بيتفعّل تلقائيًا لو المصدر الأساسي فشل. */
+const FALLBACK_API = "https://quranapi.pages.dev/api";
+let usingFallback = false;
+
+/* التلاوة الصوتية: بتستخدم بيانات القراء (assets/js/reciters-data.js)
+   المصدر: mp3quran.net — مستقل تمامًا عن api.alquran.cloud، فمش متأثر
+   بمشاكل الحظر بتاعته. */
+const RECITER_PREF_KEY = "quran_reciter_id";
 
 let SURAH_LIST_CACHE = null;
 let currentSurahNum  = 0;   // track which surah is open
@@ -24,14 +35,80 @@ function setStatus(msg, isError = false) {
   box.style.color = isError ? "#b5432f" : "var(--muted)";
 }
 
+/* ---------- طلب مع إعادة محاولة واحدة (تعامل مع انقطاع مؤقت) ---------- */
+async function fetchWithRetry(url, retries = 1, delayMs = 1200) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res;
+  } catch (err) {
+    if (retries > 0) {
+      await new Promise(r => setTimeout(r, delayMs));
+      return fetchWithRetry(url, retries - 1, delayMs);
+    }
+    throw err;
+  }
+}
+
+/* رسالة الخطأ الموحّدة — توضّح السبب الأرجح (حظر بعض مزوّدي الإنترنت لخادم
+   Al Quran Cloud نتيجة هجمات DDoS متكررة عليه منذ سبتمبر 2025) وتوفّر رابط
+   بديل مباشر بدل ما يفضل المستخدم تايه قدام رسالة عامة. */
+function apiFailureHTML(extraNote = "") {
+  return `
+    <p class="qa-loading" style="color:#b5432f; line-height:1.8;">
+      تعذّر الوصول لخادم القرآن الكريم، حتى عبر المصدر الاحتياطي.
+      ${extraNote}
+      <br>السبب الأغلب: بعض مزوّدي الإنترنت في المنطقة بيكونوا محظورين مؤقتًا
+      من عند الخادم نفسه بسبب هجمات إلكترونية متكررة عليه، مش عطل في الصفحة.
+      <br>جرّب تاني بعد شوية، أو من شبكة/VPN مختلف، أو استخدم الرابط المباشر:
+      <a href="https://alquran.cloud/quran" target="_blank" rel="noopener">alquran.cloud/quran ←</a>
+    </p>`;
+}
+
+function fallbackNotice() {
+  return `<p style="font-size:12px;color:var(--muted);margin:6px 0 14px;">
+    ⚡ تعذّر الوصول للمصدر الأساسي، فبيتم عرض النص من مصدر احتياطي (بدون تفسير الميسّر مؤقتًا).
+  </p>`;
+}
+
+/* ---------- مصدر احتياطي: quranapi.pages.dev ---------- */
+async function loadSurahListFallback() {
+  const res = await fetchWithRetry(`${FALLBACK_API}/surah.json`, 0);
+  const data = await res.json();
+  return data.map((s, i) => ({
+    number: i + 1,
+    name: s.surahNameArabicLong || s.surahNameArabic,
+    englishName: s.surahName,
+    englishNameTranslation: s.surahNameTranslation,
+    numberOfAyahs: s.totalAyah,
+    revelationType: s.revelationPlace === "Mecca" ? "Meccan" : "Medinan"
+  }));
+}
+
+async function openSurahFallback(number) {
+  const res  = await fetchWithRetry(`${FALLBACK_API}/${number}.json`, 0);
+  const data = await res.json();
+  const arabicArr = data.arabic1 || data.arabic2 || [];
+  return {
+    name: data.surahNameArabicLong || data.surahNameArabic,
+    ayahs: arabicArr.map((text, i) => ({ numberInSurah: i + 1, text })),
+    tafsirAvailable: false
+  };
+}
+
 /* ---------- قائمة السور ---------- */
 async function loadSurahList() {
   if (SURAH_LIST_CACHE) return SURAH_LIST_CACHE;
   setStatus("جارِ تحميل قائمة السور...");
-  const res = await fetch(`${QURAN_API}/surah`);
-  if (!res.ok) throw new Error("تعذّر الاتصال بخادم القرآن");
-  const data = await res.json();
-  SURAH_LIST_CACHE = data.data;
+  try {
+    const res = await fetchWithRetry(`${QURAN_API}/surah`);
+    const data = await res.json();
+    SURAH_LIST_CACHE = data.data;
+    usingFallback = false;
+  } catch (err) {
+    SURAH_LIST_CACHE = await loadSurahListFallback(); // يرمي خطأ لو فشل هو كمان
+    usingFallback = true;
+  }
   setStatus("");
   return SURAH_LIST_CACHE;
 }
@@ -65,9 +142,28 @@ function stopAudio() {
 
 function updatePlayBtn(btn, playing) {
   if (!btn) return;
-  btn.textContent = playing
-    ? "⏸ إيقاف مؤقت"
-    : "🔊 استماع للسورة كاملة (العفاسي)";
+  btn.textContent = playing ? "⏸ إيقاف مؤقت" : "🔊 استماع للسورة كاملة";
+}
+
+/* ---------- اختيار القارئ ---------- */
+function getReciterById(id) {
+  const list = window.RECITERS || [];
+  return list.find(r => String(r.id) === String(id)) || list[0] || null;
+}
+
+function populateReciterSelect(select) {
+  const list = window.RECITERS || [];
+  if (!select || list.length === 0) return;
+  const saved = localStorage.getItem(RECITER_PREF_KEY);
+  select.innerHTML = list.map(r =>
+    `<option value="${r.id}">${r.flag} ${r.name}</option>`
+  ).join("");
+  select.value = saved && getReciterById(saved) ? saved : list[0].id;
+  select.addEventListener("change", () => {
+    localStorage.setItem(RECITER_PREF_KEY, select.value);
+    stopAudio();
+    updatePlayBtn(q("#btnPlaySurah"), false);
+  });
 }
 
 function playSurahAudio(num) {
@@ -85,33 +181,24 @@ function playSurahAudio(num) {
     return;
   }
   stopAudio();
-  currentAudio = new Audio(`${CDN_SURAH}/${num}.mp3`);
+  const select   = q("#reciterSelect");
+  const reciter  = getReciterById(select ? select.value : null);
+  if (!reciter || typeof window.getSurahUrl !== "function") {
+    setStatus("تعذّر تحديد القارئ.", true);
+    return;
+  }
+  const audioUrl = window.getSurahUrl(reciter, num);
+  currentAudio = new Audio(audioUrl);
   currentAudio.play().catch(() => {
-    setStatus("تعذّر تشغيل الصوت — تأكد من اتصالك بالإنترنت.", true);
+    setStatus("تعذّر تشغيل الصوت — تأكد من اتصالك بالإنترنت، أو جرّب قارئ تاني.", true);
   });
   audioPlaying = true;
   updatePlayBtn(btn, true);
   currentAudio.onended = () => { audioPlaying = false; updatePlayBtn(btn, false); };
-  currentAudio.onerror = () => { audioPlaying = false; updatePlayBtn(btn, false); };
-}
-
-function playAyahAudio(globalNum, btn) {
-  // Toggle for ayah buttons
-  if (btn && btn.dataset.playing === "1") {
-    stopAudio();
-    btn.dataset.playing = "0";
-    btn.textContent = "🔊 استماع";
-    return;
-  }
-  stopAudio();
-  // Reset all ayah buttons
-  document.querySelectorAll("[data-play]").forEach(b => { b.textContent = "🔊 استماع"; b.dataset.playing = "0"; });
-  currentAudio = new Audio(`${CDN_AYAH}/${globalNum}.mp3`);
-  currentAudio.play().catch(() => setStatus("تعذّر تشغيل الصوت.", true));
-  if (btn) { btn.textContent = "⏸ إيقاف"; btn.dataset.playing = "1"; }
-  currentAudio.onended = () => {
-    if (btn) { btn.textContent = "🔊 استماع"; btn.dataset.playing = "0"; }
+  currentAudio.onerror = () => {
     audioPlaying = false;
+    updatePlayBtn(btn, false);
+    setStatus("تعذّر تشغيل الصوت من هذا القارئ — جرّب قارئ تاني من القائمة.", true);
   };
 }
 
@@ -131,11 +218,22 @@ async function openSurah(number) {
   window.scrollTo({ top: (reader.offsetTop || 0) - 90, behavior: "smooth" });
 
   try {
-    const res = await fetch(`${QURAN_API}/surah/${number}/editions/${EDITION_TEXT},${EDITION_TAFSIR}`);
-    if (!res.ok) throw new Error("تعذّر تحميل السورة");
-    const data = await res.json();
-    const [arabicEd, tafsirEd] = data.data;
-    const meta = arabicEd;
+    let meta, tafsirEd, hasTafsir;
+    try {
+      const res = await fetchWithRetry(`${QURAN_API}/surah/${number}/editions/${EDITION_TEXT},${EDITION_TAFSIR}`);
+      const data = await res.json();
+      [meta, tafsirEd] = data.data;
+      hasTafsir = true;
+      usingFallback = false;
+    } catch (primaryErr) {
+      const fb = await openSurahFallback(number); // يرمي خطأ لو فشل هو كمان → يوديك لل catch الخارجي
+      meta = { name: fb.name, englishName: list[number - 1] ? list[number - 1].englishName : "",
+                revelationType: list[number - 1] ? list[number - 1].revelationType : "Meccan",
+                numberOfAyahs: fb.ayahs.length, ayahs: fb.ayahs.map(a => ({ ...a, number: null })) };
+      tafsirEd = { ayahs: [] };
+      hasTafsir = false;
+      usingFallback = true;
+    }
 
     const prevNum = number > 1   ? number - 1 : null;
     const nextNum = number < 114 ? number + 1 : null;
@@ -143,6 +241,7 @@ async function openSurah(number) {
     const nextName = nextNum && list[nextNum - 1] ? list[nextNum - 1].name : "";
 
     let html = `
+      ${usingFallback ? fallbackNotice() : ""}
       <div class="reader-head">
         <div style="display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap; margin-bottom:16px;">
           <button class="btn-back" id="btnBackToList">→ رجوع لكل السور</button>
@@ -151,24 +250,28 @@ async function openSurah(number) {
         </div>
         <h2>سورة ${meta.name.replace('سُورَةُ ', '')}</h2>
         <p class="reader-sub">${meta.englishName} · ${meta.revelationType === 'Meccan' ? 'مكية' : 'مدنية'} · ${meta.numberOfAyahs} آية</p>
-        <button class="btn-calc" id="btnPlaySurah">🔊 استماع للسورة كاملة (العفاسي)</button>
+        <div class="reciter-picker">
+          <select id="reciterSelect" aria-label="اختر القارئ"></select>
+          <button class="btn-calc" id="btnPlaySurah">🔊 استماع للسورة كاملة</button>
+        </div>
       </div>
       <div class="ayah-list">
     `;
 
     meta.ayahs.forEach((ayah, i) => {
-      const tafsirText = tafsirEd.ayahs[i] ? tafsirEd.ayahs[i].text : "";
+      const tafsirText = hasTafsir && tafsirEd.ayahs[i] ? tafsirEd.ayahs[i].text : "";
       html += `
         <div class="ayah-block">
           <div class="ayah-text">
             ${ayah.text}
             <span class="ayah-badge">﴿${ayah.numberInSurah}﴾</span>
           </div>
+          ${hasTafsir ? `
           <div class="ayah-actions">
-            <button class="mini-btn" data-play="${ayah.number}" data-playing="0">🔊 استماع</button>
             <button class="mini-btn" data-tafsir-toggle="${i}">📖 التفسير الميسّر</button>
           </div>
           <div class="ayah-tafsir" id="tafsir-${i}" style="display:none;">${tafsirText}</div>
+          ` : ""}
         </div>
       `;
     });
@@ -188,13 +291,9 @@ async function openSurah(number) {
       if (btn) btn.addEventListener("click", () => openSurah(parseInt(btn.dataset.to, 10)));
     });
 
-    // Play surah
+    // القارئ + تشغيل السورة
+    populateReciterSelect(q("#reciterSelect"));
     q("#btnPlaySurah").addEventListener("click", () => playSurahAudio(number));
-
-    // Ayah audio buttons
-    reader.querySelectorAll("[data-play]").forEach(btn => {
-      btn.addEventListener("click", () => playAyahAudio(btn.dataset.play, btn));
-    });
 
     // Tafsir toggle
     reader.querySelectorAll("[data-tafsir-toggle]").forEach(btn => {
@@ -206,7 +305,7 @@ async function openSurah(number) {
 
   } catch (err) {
     reader.innerHTML = `
-      <p class="qa-loading" style="color:#b5432f;">تعذّر تحميل السورة — تأكد من اتصالك بالإنترنت.</p>
+      ${apiFailureHTML(`(السورة ${number})`)}
       <button class="btn-back" id="btnBackErr">→ رجوع</button>`;
     q("#btnBackErr") && q("#btnBackErr").addEventListener("click", () => {
       reader.style.display  = "none";
@@ -267,7 +366,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const list = await loadSurahList();
     renderSurahGrid(list);
   } catch (err) {
-    setStatus("تعذّر تحميل قائمة السور. تأكد من اتصالك بالإنترنت.", true);
+    const grid = q("#surahGrid");
+    if (grid) grid.innerHTML = apiFailureHTML();
+    setStatus("");
   }
 
   const searchInput = q("#qSearchInput");

@@ -65,6 +65,12 @@
   }
   .mini-btn:hover{background:var(--teal); color:#fff;}
   .ayah-tafsir{margin-top:14px; padding-top:14px; border-top:1px dashed var(--line); font-size:14px; color:var(--muted); line-height:1.9;}
+  .reciter-picker{display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; margin-top:14px;}
+  .reciter-picker select{
+    padding:11px 16px; border-radius:999px; border:1px solid var(--line); background:#fff;
+    font-family:'Tajawal'; font-size:13.5px; color:var(--text); max-width:260px;
+  }
+  .reciter-picker select:focus{outline:none; border-color:var(--teal);}
 
   @media(max-width:900px){#surahGrid{grid-template-columns:1fr 1fr;}}
   @media(max-width:620px){#surahGrid{grid-template-columns:1fr;} .ayah-text{font-size:20px;}}
@@ -123,9 +129,9 @@
   <div class="wrap">
     <span class="eyebrow">القرآن الكريم</span>
     <h1>تصفح القرآن كاملاً بالتفسير والاستماع</h1>
-    <p>١١٤ سورة، النص العثماني كامل، مع التفسير الميسّر لكل آية وتلاوة صوتية — كله حي مباشرة من غير ما تحمّل حاجة.</p>
+    <p>١١٤ سورة، النص العثماني كامل، مع التفسير الميسّر لكل آية، واستماع بصوت أي قارئ من 63 قارئ موثق — كله حي مباشرة من غير ما تحمّل حاجة.</p>
     <a href="quran-reciters.html" style="display:inline-flex;align-items:center;gap:8px;margin-top:10px;background:var(--teal-deep);color:var(--gold-soft);font-family:'Cairo';font-weight:800;font-size:14px;padding:12px 28px;border-radius:999px;transition:opacity .2s;">
-      🎙️ استمع بصوت 63 قارئ موثق ←
+      🎙️ تصفّح كل القراء بالبحث والتصنيف ←
     </a>
   </div>
 </section>
@@ -134,7 +140,7 @@
   <div class="wrap">
 
     <div class="qa-note">
-      📡 المحتوى في هذه الصفحة بييجي مباشرة من <a href="https://alquran.cloud/api" target="_blank">Al Quran Cloud API</a> (خدمة مجانية مفتوحة، بدون تسجيل)، فمحتاج اتصال بالإنترنت. النص والتلاوة موثوقان، لكن لو حصل انقطاع في الخدمة نفسها من عندهم، الصفحة هتوضح رسالة خطأ بدل ما تفضل فاضية.
+      📡 نص الآيات والتفسير الميسّر بييجوا من <a href="https://alquran.cloud/api" target="_blank">Al Quran Cloud API</a> (خدمة مجانية مفتوحة، بدون تسجيل)، والتلاوة الصوتية من <a href="https://mp3quran.net" target="_blank">mp3quran.net</a> — مصدرين مختلفين ومستقلين عن بعض، فلو حصل انقطاع في أي مصدر، الصفحة هتوضح رسالة خطأ أو تتحول تلقائيًا لمصدر بديل بدل ما تفضل فاضية.
     </div>
 
     <div id="qStatus"></div>
@@ -177,6 +183,7 @@
 <script src="assets/js/search-data.js"></script>
 <script src="assets/js/topics.js"></script>
 <script src="assets/js/main.js"></script>
+<script src="assets/js/reciters-data.js"></script>
 <script src="assets/js/quran.js"></script>
 </body>
 </html>
