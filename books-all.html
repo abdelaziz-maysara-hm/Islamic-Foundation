@@ -28,19 +28,20 @@
 .book-cat-badge{font-size:10.5px;font-weight:800;padding:2px 9px;border-radius:20px;background:var(--teal-soft);color:var(--teal-deep);align-self:flex-start;}
 .book-title{font-size:14.5px;font-weight:800;color:var(--teal-deep);font-family:'Cairo';line-height:1.4;}
 .book-author{font-size:12px;color:var(--muted);}
-.book-link{display:inline-flex;align-items:center;gap:5px;margin-top:6px;font-size:12px;font-weight:700;color:var(--gold);text-decoration:none;font-family:'Cairo';}
+.book-link{display:inline-flex;align-items:center;gap:5px;margin-top:6px;font-size:12px;font-weight:700;color:var(--gold-text);text-decoration:none;font-family:'Cairo';}
 .book-link:hover{color:var(--teal);}
+.book-link-alt{display:inline-flex;align-items:center;gap:5px;margin-top:4px;font-size:10.5px;font-weight:600;color:var(--muted);text-decoration:none;font-family:'Tajawal';}
+.book-link-alt:hover{color:var(--teal-deep); text-decoration:underline;}
 </style>
 </head>
 <body>
 
 <header>
   <div class="wrap nav">
-    <a href="index.html" class="logo"><span class="mark">ق</span> المكتبة الجامعة</a>
+    <a href="index.html" class="logo">المكتبة الجامعة</a>
     <nav class="nav-links">
       <a href="index.html">الرئيسية</a>
       <a href="quran.html">القرآن الكريم</a>
-      <a href="quran-reciters.html">قراء القرآن</a>
       <a href="books.html" class="active">الكتب</a>
       <a href="videos.html">الدروس المرئية</a>
       <div class="nav-drop">
@@ -68,7 +69,6 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="index.html">الرئيسية</a>
     <a href="quran.html">القرآن الكريم</a>
-      <a href="quran-reciters.html">قراء القرآن</a>
     <a href="books.html">الكتب</a>
     <a href="videos.html">الدروس المرئية</a>
     <a href="fatawa.html">الفتاوى</a>
@@ -108,11 +108,10 @@
 <footer>
   <div class="wrap">
     <div class="footer-grid">
-      <a href="index.html" class="logo"><span class="mark">ق</span> المكتبة الجامعة</a>
+      <a href="index.html" class="logo">المكتبة الجامعة</a>
       <div class="footer-links">
         <a href="books.html">الكتب</a>
         <a href="quran.html">القرآن الكريم</a>
-      <a href="quran-reciters.html">قراء القرآن</a>
         <a href="fatawa.html">الفتاوى</a>
         <a href="glossary.html">القاموس</a>
         <a href="apps.html">تطبيقات مفيدة</a>
@@ -171,12 +170,16 @@ document.addEventListener('DOMContentLoaded', () => {
     card.dataset.cat = b.category;
     card.dataset.title = b.title;
     card.dataset.author = b.author;
+    const searchUrl = `https://www.google.com/search?q=site:shamela.ws+${encodeURIComponent(b.title + ' ' + b.author)}`;
     card.innerHTML = `
       <span class="book-cat-badge">${catLabel(b.category)}</span>
       <span class="book-title">${b.title}</span>
       <span class="book-author">✍️ ${b.author}</span>
       <a class="book-link" href="https://shamela.ws/book/${b.shamela}" target="_blank" rel="noopener">
         📖 اقرأ في الشاملة ←
+      </a>
+      <a class="book-link-alt" href="${searchUrl}" target="_blank" rel="noopener" title="لو الرابط الأساسي ما فتحش الكتاب الصحيح">
+        🔍 لم يفتح الكتاب الصحيح؟ دوّر عليه بالاسم
       </a>`;
     grid.appendChild(card);
   });

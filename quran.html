@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>القرآن الكريم — قراءة وتفسير واستماع — المكتبة الجامعة</title>
-<meta name="description" content="تصفح القرآن الكريم كاملاً بالنص العثماني مع التفسير الميسّر وتلاوة صوتية، وابحث في آياته مباشرة من المتصفح.">
+<title>القرآن الكريم — قراءة وتفسير واستماع بصوت 63 قارئ — المكتبة الجامعة</title>
+<meta name="description" content="تصفح القرآن الكريم كاملاً بالنص العثماني مع التفسير الميسّر، وابحث في آياته، واستمع بصوت أي قارئ من 63 قارئ موثق — كله في صفحة واحدة.">
 <link rel="canonical" href="https://islamiclibraries.com/quran.html">
 <meta property="og:url" content="https://islamiclibraries.com/quran.html">
 <meta property="og:type" content="website">
-<meta property="og:title" content="القرآن الكريم — قراءة وتفسير واستماع — المكتبة الجامعة">
-<meta property="og:description" content="تصفح القرآن الكريم كاملاً بالنص العثماني مع التفسير الميسّر وتلاوة صوتية، وابحث في آياته مباشرة من المتصفح.">
+<meta property="og:title" content="القرآن الكريم — قراءة وتفسير واستماع بصوت 63 قارئ — المكتبة الجامعة">
+<meta property="og:description" content="تصفح القرآن الكريم كاملاً بالنص العثماني مع التفسير الميسّر، وابحث في آياته، واستمع بصوت أي قارئ من 63 قارئ موثق — كله في صفحة واحدة.">
 <meta property="og:locale" content="ar_AR">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="القرآن الكريم — قراءة وتفسير واستماع — المكتبة الجامعة">
-<meta name="twitter:description" content="تصفح القرآن الكريم كاملاً بالنص العثماني مع التفسير الميسّر وتلاوة صوتية، وابحث في آياته مباشرة من المتصفح.">
+<meta name="twitter:title" content="القرآن الكريم — قراءة وتفسير واستماع بصوت 63 قارئ — المكتبة الجامعة">
+<meta name="twitter:description" content="تصفح القرآن الكريم كاملاً بالنص العثماني مع التفسير الميسّر، وابحث في آياته، واستمع بصوت أي قارئ من 63 قارئ موثق — كله في صفحة واحدة.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@700;800;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -61,7 +61,7 @@
   .ayah-list{max-width:720px; margin:0 auto;}
   .ayah-block{background:#fff; border:1px solid var(--line); border-radius:14px; padding:22px 24px; margin-bottom:14px;}
   .ayah-text{font-family:'Amiri', serif; font-size:23px; line-height:2.3; color:var(--text);}
-  .ayah-badge{color:var(--gold); font-size:16px; font-weight:700; font-family:'Tajawal';}
+  .ayah-badge{color:var(--gold-text); font-size:16px; font-weight:700; font-family:'Tajawal';}
   .ayah-actions{display:flex; gap:10px; margin-top:14px;}
   .mini-btn{
     background:var(--teal-soft); color:var(--teal-deep); border:none; font-size:12.5px; font-weight:800;
@@ -76,6 +76,116 @@
   }
   .reciter-picker select:focus{outline:none; border-color:var(--teal);}
 
+  /* ── تبويبات: قراءة / قراء ── */
+  .quran-tabs{display:flex; justify-content:center; gap:10px; margin-bottom:28px; flex-wrap:wrap;}
+  .qtab-btn{
+    background:#fff; border:1px solid var(--line); color:var(--muted);
+    font-family:'Cairo'; font-weight:800; font-size:14px; padding:12px 26px;
+    border-radius:999px; cursor:pointer; transition:background .2s, color .2s;
+  }
+  .qtab-btn.active, .qtab-btn:hover{background:var(--teal-deep); color:#fff; border-color:var(--teal-deep);}
+
+  /* ── فلتر الأقسام (تبويب القراء) ── */
+  .cat-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
+  .cat-btn{
+    padding:8px 18px;border-radius:999px;border:1px solid var(--line);
+    background:var(--card);color:var(--muted);font-family:'Cairo';font-weight:700;
+    font-size:13px;cursor:pointer;transition:background .2s,color .2s;
+  }
+  .cat-btn.active,.cat-btn:hover{background:var(--teal-deep);color:#fff;border-color:var(--teal-deep);}
+
+  /* ── بحث القراء ── */
+  .reciters-search{
+    width:100%;max-width:400px;padding:11px 18px;border-radius:999px;
+    border:1px solid var(--line);background:var(--card);color:var(--text);
+    font-family:'Tajawal';font-size:14px;margin-bottom:22px;
+    transition:background .25s,color .25s;
+  }
+  .reciters-search:focus{outline:none;border-color:var(--teal);}
+
+  /* ── شبكة القراء ── */
+  .reciters-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(175px,1fr));
+    gap:14px;
+  }
+  .reciter-card{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:20px 14px;text-align:center;cursor:pointer;
+    transition:transform .18s,box-shadow .18s,background .25s;
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+  }
+  .reciter-card:hover{transform:translateY(-5px);box-shadow:var(--shadow);}
+  .reciter-card.hidden{display:none;}
+  .reciter-avatar{
+    width:56px;height:56px;border-radius:50%;
+    background:linear-gradient(135deg,var(--teal-deep),var(--teal));
+    color:var(--gold-soft);font-family:'Amiri';font-size:22px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    overflow:hidden;
+  }
+  .reciter-avatar img{width:100%;height:100%;object-fit:cover;}
+  .reciter-name{font-size:14px;font-weight:800;color:var(--teal-deep);font-family:'Cairo';line-height:1.4;}
+  .reciter-sub{font-size:11.5px;color:var(--muted);}
+  .reciter-badge{
+    font-size:10.5px;font-weight:800;padding:3px 10px;border-radius:20px;
+    background:var(--teal-soft);color:var(--teal-deep);
+  }
+  .reciter-badge.has-audio{background:var(--gold-soft);color:#7a5a1e;}
+
+  /* ── مودال السور ── */
+  .modal-overlay{
+    display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);
+    z-index:200;align-items:flex-start;justify-content:center;
+    padding:30px 16px;overflow-y:auto;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{
+    background:var(--card);border-radius:20px;padding:28px 24px;
+    max-width:720px;width:100%;position:relative;
+    box-shadow:0 30px 80px rgba(0,0,0,0.35);
+    transition:background .25s;
+  }
+  .modal-close{
+    position:absolute;top:14px;left:14px;background:var(--teal-soft);border:none;
+    color:var(--teal-deep);font-size:18px;border-radius:50%;width:34px;height:34px;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;
+  }
+  .modal-close:hover{background:var(--teal);color:#fff;}
+  .modal-head{text-align:center;margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(--line);}
+  .modal-head h2{font-size:22px;color:var(--teal-deep);margin-bottom:4px;}
+  .modal-head p{font-size:13px;color:var(--muted);}
+  .modal-note{
+    background:var(--teal-soft);border-radius:10px;padding:10px 14px;
+    font-size:12px;color:var(--teal-deep);margin-bottom:18px;text-align:center;
+  }
+  .surahs-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+    gap:8px;
+  }
+  .surah-btn{
+    background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:8px 6px;text-align:center;cursor:pointer;
+    transition:background .15s,transform .15s,box-shadow .15s;
+    text-decoration:none;display:block;
+  }
+  .surah-btn:hover{background:var(--teal-deep);color:#fff;transform:scale(1.04);box-shadow:var(--shadow);}
+  .surah-btn:hover .s-num,.surah-btn:hover .s-name{color:#fff;}
+  .s-num{font-size:10.5px;color:var(--gold-text);font-weight:800;display:block;margin-bottom:2px;}
+  .s-name{font-size:13px;color:var(--teal-deep);font-family:'Amiri';font-weight:700;display:block;}
+  .modal-audio-player{
+    background:var(--teal-soft);border-radius:12px;padding:14px 16px;
+    margin-bottom:18px;display:none;align-items:center;gap:12px;
+  }
+  .modal-audio-player.show{display:flex;}
+  .modal-audio-player audio{flex:1;width:100%;}
+  .modal-audio-player button{
+    background:var(--teal-deep);color:#fff;border:none;border-radius:999px;
+    padding:8px 16px;font-family:'Cairo';font-weight:700;font-size:13px;cursor:pointer;
+  }
+  .reciters-count{font-size:13px;color:var(--muted);margin-bottom:16px;}
+
   @media(max-width:900px){#surahGrid{grid-template-columns:1fr 1fr;}}
   @media(max-width:620px){#surahGrid{grid-template-columns:1fr;} .ayah-text{font-size:20px;}}
 </style>
@@ -84,7 +194,7 @@
 
 <header>
   <div class="wrap nav">
-    <a href="index.html" class="logo"><span class="mark">ق</span> المكتبة الجامعة</a>
+    <a href="index.html" class="logo">المكتبة الجامعة</a>
     <nav class="nav-links">
       <a href="index.html">الرئيسية</a>
       <a href="quran.html" class="active">القرآن الكريم</a>
@@ -135,42 +245,90 @@
     <span class="eyebrow">القرآن الكريم</span>
     <h1>تصفح القرآن كاملاً بالتفسير والاستماع</h1>
     <p>١١٤ سورة، النص العثماني كامل، مع التفسير الميسّر لكل آية، واستماع بصوت أي قارئ من 63 قارئ موثق — كله حي مباشرة من غير ما تحمّل حاجة.</p>
-    <a href="quran-reciters.html" style="display:inline-flex;align-items:center;gap:8px;margin-top:10px;background:var(--teal-deep);color:var(--gold-soft);font-family:'Cairo';font-weight:800;font-size:14px;padding:12px 28px;border-radius:999px;transition:opacity .2s;">
-      🎙️ تصفّح كل القراء بالبحث والتصنيف ←
-    </a>
   </div>
 </section>
 
 <section style="padding-top:0;">
   <div class="wrap">
 
-    <div class="qa-note">
-      📡 نص الآيات والتفسير الميسّر بييجوا من <a href="https://alquran.cloud/api" target="_blank">Al Quran Cloud API</a> (خدمة مجانية مفتوحة، بدون تسجيل)، والتلاوة الصوتية من <a href="https://mp3quran.net" target="_blank">mp3quran.net</a> — مصدرين مختلفين ومستقلين عن بعض، فلو حصل انقطاع في أي مصدر، الصفحة هتوضح رسالة خطأ أو تتحول تلقائيًا لمصدر بديل بدل ما تفضل فاضية.
+    <div class="quran-tabs">
+      <button class="qtab-btn active" id="qtabRead" data-tab="read">📖 قراءة السور</button>
+      <button class="qtab-btn" id="qtabReciters" data-tab="reciters">🎙️ تصفح القراء</button>
     </div>
 
-    <div id="qStatus"></div>
+    <div id="tabRead">
 
-    <div class="qa-searchwrap">
-      <input type="text" id="qSearchInput" placeholder="ابحث في نص القرآن الكريم... (مثال: الصبر)">
-      <div id="qSearchResults"></div>
-    </div>
-
-    <div id="surahBrowser">
-      <div id="surahGrid">
-        <p class="qa-loading">جارِ تحميل قائمة السور...</p>
+      <div class="qa-note">
+        📡 نص الآيات والتفسير الميسّر بييجوا من <a href="https://alquran.cloud/api" target="_blank">Al Quran Cloud API</a> (خدمة مجانية مفتوحة، بدون تسجيل)، والتلاوة الصوتية من <a href="https://mp3quran.net" target="_blank">mp3quran.net</a> — مصدرين مختلفين ومستقلين عن بعض، فلو حصل انقطاع في أي مصدر، الصفحة هتوضح رسالة خطأ أو تتحول تلقائيًا لمصدر بديل بدل ما تفضل فاضية.
       </div>
+
+      <div id="qStatus"></div>
+
+      <div class="qa-searchwrap">
+        <input type="text" id="qSearchInput" placeholder="ابحث في نص القرآن الكريم... (مثال: الصبر)">
+        <div id="qSearchResults"></div>
+      </div>
+
+      <div id="surahBrowser">
+        <div id="surahGrid">
+          <p class="qa-loading">جارِ تحميل قائمة السور...</p>
+        </div>
+      </div>
+
+      <div id="surahReader"></div>
+
     </div>
 
-    <div id="surahReader"></div>
+    <div id="tabReciters" style="display:none;">
+
+      <input class="reciters-search" type="text" id="recitersSearch" placeholder="ابحث عن قارئ...">
+
+      <div class="cat-filter">
+        <button class="cat-btn active" data-cat="all">الكل</button>
+        <button class="cat-btn" data-cat="haramayn">🕋 المسجد الحرام</button>
+        <button class="cat-btn" data-cat="madinah">🕌 المسجد النبوي</button>
+        <button class="cat-btn" data-cat="egypt">🇪🇬 مصر</button>
+        <button class="cat-btn" data-cat="saudi">🇸🇦 السعودية</button>
+        <button class="cat-btn" data-cat="gulf">🌊 الخليج</button>
+        <button class="cat-btn" data-cat="levant">🌿 الشام</button>
+        <button class="cat-btn" data-cat="maghreb">🌅 المغرب</button>
+        <button class="cat-btn" data-cat="africa">🌍 أفريقيا</button>
+        <button class="cat-btn" data-cat="asia">🌏 آسيا</button>
+        <button class="cat-btn" data-cat="other">🌐 آخرون</button>
+      </div>
+
+      <p class="reciters-count" id="recitersCount"></p>
+
+      <div class="reciters-grid" id="recitersGrid"></div>
+
+    </div>
 
   </div>
 </section>
+
+<!-- مودال السور (تبويب القراء) -->
+<div class="modal-overlay" id="surahModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose" aria-label="إغلاق">✕</button>
+    <div class="modal-head">
+      <div id="modalAvatar" style="width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--teal-deep),var(--teal));color:var(--gold-soft);font-family:'Amiri';font-size:22px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;"></div>
+      <h2 id="modalTitle">اسم القارئ</h2>
+      <p id="modalSub"></p>
+    </div>
+    <div class="modal-note" id="modalNote"></div>
+    <div class="modal-audio-player" id="inlinePlayer">
+      <audio id="inlineAudio" controls style="width:100%;"></audio>
+      <button id="stopAudioBtn">⏹ إيقاف</button>
+    </div>
+    <div class="surahs-grid" id="surahsGrid"></div>
+  </div>
+</div>
 
 </main>
 <footer>
   <div class="wrap">
     <div class="footer-grid">
-      <a href="index.html" class="logo"><span class="mark">ق</span> المكتبة الجامعة</a>
+      <a href="index.html" class="logo">المكتبة الجامعة</a>
       <div class="footer-links">
         <a href="quran.html">القرآن الكريم</a>
         <a href="books.html">الكتب</a>
@@ -191,6 +349,171 @@
 <script src="assets/js/main.js"></script>
 <script src="assets/js/reciters-data.js"></script>
 <script src="assets/js/quran.js"></script>
+<script>
+/* ================================================================
+   تبديل التبويبات: قراءة السور / تصفح القراء
+   ================================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  const tabRead     = document.getElementById('tabRead');
+  const tabReciters = document.getElementById('tabReciters');
+  const btnRead     = document.getElementById('qtabRead');
+  const btnReciters = document.getElementById('qtabReciters');
+
+  function showTab(name) {
+    const isRead = name === 'read';
+    tabRead.style.display     = isRead ? 'block' : 'none';
+    tabReciters.style.display = isRead ? 'none'  : 'block';
+    btnRead.classList.toggle('active', isRead);
+    btnReciters.classList.toggle('active', !isRead);
+  }
+  btnRead.addEventListener('click', () => showTab('read'));
+  btnReciters.addEventListener('click', () => showTab('reciters'));
+
+  if (location.hash === '#reciters') showTab('reciters');
+
+  /* ================================================================
+     منطق تبويب القراء (منقول من quran-reciters.html)
+     ================================================================ */
+  const reciters   = window.RECITERS || [];
+  const surahNames = window.SURAH_NAMES || [];
+  const getSurahUrl = window.getSurahUrl;
+
+  const grid       = document.getElementById('recitersGrid');
+  const search     = document.getElementById('recitersSearch');
+  const countEl    = document.getElementById('recitersCount');
+  const modal      = document.getElementById('surahModal');
+  const modalClose = document.getElementById('modalClose');
+  const surahsGrid = document.getElementById('surahsGrid');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalSub   = document.getElementById('modalSub');
+  const modalNote  = document.getElementById('modalNote');
+  const modalAvatar= document.getElementById('modalAvatar');
+  const inlinePlayer = document.getElementById('inlinePlayer');
+  const inlineAudio  = document.getElementById('inlineAudio');
+  const stopBtn      = document.getElementById('stopAudioBtn');
+
+  let currentCat = 'all';
+
+  function renderReciters(list) {
+    grid.innerHTML = '';
+    list.forEach(r => {
+      const hasAudio = !!(r.edition || r.mp3base);
+      const initials = r.name.trim().split(' ')[0].slice(0,2);
+      const card = document.createElement('div');
+      card.className = 'reciter-card';
+      card.dataset.cat = r.category;
+      card.dataset.name = r.name;
+      card.innerHTML = `
+        <div class="reciter-avatar">${r.photo ? `<img src="${r.photo}" alt="${r.name}" loading="lazy">` : initials}</div>
+        <span class="reciter-name">${r.name}</span>
+        <span class="reciter-sub">${r.flag} ${r.categoryLabel}</span>
+        <span class="reciter-badge ${hasAudio ? 'has-audio' : ''}">
+          ${hasAudio ? '🟡 استماع مباشر' : '🔗 رابط خارجي'}
+        </span>
+      `;
+      card.addEventListener('click', () => openModal(r));
+      grid.appendChild(card);
+    });
+    updateCount();
+  }
+
+  function updateCount() {
+    const visible = grid.querySelectorAll('.reciter-card:not(.hidden)').length;
+    const total   = grid.querySelectorAll('.reciter-card').length;
+    countEl.textContent = `عرض ${visible} من ${total} قارئ`;
+  }
+
+  document.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentCat = btn.dataset.cat;
+      applyFilters();
+    });
+  });
+
+  search.addEventListener('input', applyFilters);
+
+  function applyFilters() {
+    const q = search.value.trim();
+    grid.querySelectorAll('.reciter-card').forEach(card => {
+      const catOk  = (currentCat === 'all') || (card.dataset.cat === currentCat);
+      const nameOk = !q || card.dataset.name.includes(q);
+      card.classList.toggle('hidden', !(catOk && nameOk));
+    });
+    updateCount();
+  }
+
+  function openModal(r) {
+    const hasAudio = !!(r.edition || r.mp3base);
+    const initials = r.name.trim().split(' ')[0].slice(0,2);
+
+    modalAvatar.innerHTML = r.photo ? `<img src="${r.photo}" alt="${r.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">` : initials;
+    modalTitle.textContent  = r.name;
+    modalSub.textContent    = `${r.flag} ${r.categoryLabel}`;
+    inlinePlayer.classList.remove('show');
+    inlineAudio.pause();
+    inlineAudio.src = '';
+
+    modalNote.innerHTML = hasAudio
+      ? '🟡 <strong>استماع مباشر:</strong> اضغط على أي سورة لتشغيل الصوت مباشرة في الصفحة.'
+      : '🔗 <strong>رابط خارجي:</strong> سيفتح موقع mp3quran.net — اختر السورة هناك.';
+
+    surahsGrid.innerHTML = '';
+    surahNames.forEach((name, idx) => {
+      const surahNum = idx + 1;
+      const url = getSurahUrl(r, surahNum);
+      const btn = document.createElement('a');
+      btn.className = 'surah-btn';
+
+      if (hasAudio) {
+        btn.href = '#';
+        btn.addEventListener('click', e => {
+          e.preventDefault();
+          playInline(url, r.name, name, surahNum);
+        });
+      } else {
+        btn.href = url;
+        btn.target = '_blank';
+        btn.rel = 'noopener';
+      }
+
+      btn.innerHTML = `<span class="s-num">سورة ${surahNum}</span><span class="s-name">${name}</span>`;
+      surahsGrid.appendChild(btn);
+    });
+
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function playInline(url, reciterName, surahName, surahNum) {
+    inlineAudio.src = url;
+    inlineAudio.play().catch(() => { window.open(url, '_blank'); });
+    inlinePlayer.classList.add('show');
+    inlinePlayer.title = `${reciterName} — سورة ${surahName} (${surahNum})`;
+  }
+
+  stopBtn.addEventListener('click', () => {
+    inlineAudio.pause();
+    inlineAudio.src = '';
+    inlinePlayer.classList.remove('show');
+  });
+
+  function closeModal() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+    inlineAudio.pause();
+    inlineAudio.src = '';
+    inlinePlayer.classList.remove('show');
+  }
+
+  modalClose.addEventListener('click', closeModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  renderReciters(reciters);
+});
+</script>
 <script data-goatcounter="https://princezizo.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
